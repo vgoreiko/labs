@@ -140,6 +140,7 @@
   },
   "defaultProject": "stms-test-task",
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "defaultCollection": "@ngrx/schematics"
   }
 }
