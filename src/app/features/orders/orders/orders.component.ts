@@ -6,7 +6,6 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
 import {Order} from "../models";
 import {
-  changeOrderFavorite,
   loadOrders,
 } from "../state/order.actions";
 import {
@@ -14,9 +13,10 @@ import {
   isLoadingNotStarted,
   State,
   isLoadingInProgress,
-  selectIsOrderFavorite
 } from "../state";
 import {MatCheckboxChange} from "@angular/material/checkbox";
+import {addToFavorite, removeFromFavorite} from "../../favorites/state/favorite.actions";
+import {selectIsOrderFavorite} from "../../favorites/state";
 
 @Component({
   selector: "st-orders",
@@ -61,7 +61,9 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
 
   changeFavorite(event: MatCheckboxChange, id: number) {
-    this._store.dispatch(changeOrderFavorite({id, checked: event.checked}));
+    event.checked
+        ? this._store.dispatch(addToFavorite({favType: "orders", id}))
+        : this._store.dispatch(removeFromFavorite({favType: "orders", id}));
   }
 
   handleGetOrders() {

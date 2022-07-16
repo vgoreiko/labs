@@ -13,10 +13,3 @@ export const loadOrdersError = createAction(
   '[Order/API] Load Orders Error',
   props<{ error: string }>()
 );
-export const clearOrders = createAction(
-  '[Order/API] Clear Orders'
-);
-export const changeOrderFavorite = createAction(
-  '[Order/API] Change Order Favorite',
-  props<{ id: number, checked: boolean }>()
-);

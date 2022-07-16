@@ -7,7 +7,6 @@ import {LoadingStateEnum} from "../models/loading-state.enum";
 export const ordersFeatureKey = 'orders';
 
 export interface State extends EntityState<Order> {
-  favoriteIds: number[];
   loading: LoadingStateEnum;
 }
 
@@ -16,7 +15,6 @@ export const adapter: EntityAdapter<Order> = createEntityAdapter<Order>({
 });
 
 export const initialState: State = adapter.getInitialState({
-  favoriteIds: [],
   loading: LoadingStateEnum.NOT_STARTED,
 });
 
@@ -37,16 +35,6 @@ export const reducer = createReducer(
   ),
   on(OrderActions.loadOrdersError,
     () => ({...initialState, loading: LoadingStateEnum.NOT_STARTED})
-  ),
-  on(OrderActions.changeOrderFavorite,
-    (state, action) => {
-      const {id, checked} = action;
-      const {favoriteIds} = state;
-      return {
-        ...state,
-        favoriteIds: checked ? [...favoriteIds, id] : favoriteIds.filter(item => item !== id),
-      }
-    }
   ),
 );
 

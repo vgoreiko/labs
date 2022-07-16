@@ -7,8 +7,10 @@ import {Store} from "@ngrx/store";
 import {debounceTime, takeUntil} from "rxjs/operators";
 import {MatCheckboxChange} from "@angular/material/checkbox";
 import {Patient} from "../models";
-import {isLoadingInProgress, isLoadingNotStarted, selectAllPatients, selectIsPatientFavorite, State} from "../state";
-import {changePatientFavorite, clearPatients, loadPatients} from "../state/patient.actions";
+import {isLoadingInProgress, isLoadingNotStarted, selectAllPatients, State} from "../state";
+import {loadPatients} from "../state/patient.actions";
+import {addToFavorite, removeFromFavorite} from "../../favorites/state/favorite.actions";
+import {selectIsPatientFavorite} from "../../favorites/state";
 
 @Component({
   selector: "st-patients",
@@ -53,7 +55,9 @@ export class PatientsComponent implements OnInit, OnDestroy {
   }
 
   changeFavorite(event: MatCheckboxChange, id: number) {
-    this._store.dispatch(changePatientFavorite({id, checked: event.checked}));
+    event.checked
+      ? this._store.dispatch(addToFavorite({favType: "patients", id}))
+      : this._store.dispatch(removeFromFavorite({favType: "patients", id}));
   }
 
   handleGetPatients() {

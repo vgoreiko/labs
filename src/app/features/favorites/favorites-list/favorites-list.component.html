@@ -2,8 +2,71 @@
     <div rtl>
         <h1 class="main-heading">{{ 'stms.favorites.title' | translate }}</h1>
         <section class="content">
-            <div *ngFor="let order of favoriteOrders$ | async">{{order.orderNum}}</div>
-            <div *ngFor="let patient of favoritePatients$ | async">{{patient.code}}</div>
+            <h3>Orders</h3>
+            <table mat-table [dataSource]="favoriteOrders$" class="mat-elevation-z8">
+
+                <ng-container matColumnDef="orderNum">
+                    <th mat-header-cell *matHeaderCellDef> Id</th>
+                    <td mat-cell *matCellDef="let element"> {{element.orderNum}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="orderName">
+                    <th mat-header-cell *matHeaderCellDef> Name</th>
+                    <td mat-cell *matCellDef="let element"> {{element.orderName}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef> Status </th>
+                    <td mat-cell *matCellDef="let element"> {{element.status?.name}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="creator">
+                    <th mat-header-cell *matHeaderCellDef> Creator </th>
+                    <td mat-cell *matCellDef="let element"> {{element.creator?.name}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="favorite">
+                    <th mat-header-cell *matHeaderCellDef> Favorite </th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-checkbox
+                                [checked]="isOrderFavorite(element.orderNum) | async"
+                                (change)="changeFavorite($event, element.orderNum, 'orders')"></mat-checkbox>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedOrderColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedOrderColumns;"></tr>
+            </table>
+            <h3>Patients</h3>
+            <table mat-table [dataSource]="favoritePatients$" class="mat-elevation-z8">
+
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef> Id </th>
+                    <td mat-cell *matCellDef="let element"> {{element.code}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="fullName">
+                    <th mat-header-cell *matHeaderCellDef> Full Name </th>
+                    <td mat-cell *matCellDef="let element"> {{element.fullName}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="age">
+                    <th mat-header-cell *matHeaderCellDef> Age </th>
+                    <td mat-cell *matCellDef="let element"> {{element?.computedAge}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="favorite">
+                    <th mat-header-cell *matHeaderCellDef> Favorite </th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-checkbox
+                                [checked]="isPatientFavorite(element.code) | async"
+                                (change)="changeFavorite($event, element.code, 'patients')"></mat-checkbox>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedPatientsColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedPatientsColumns;"></tr>
+            </table>
         </section>
     </div>
 </div>

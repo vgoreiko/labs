@@ -6,7 +6,6 @@ import * as PatientActions from './patient.actions';
 export const patientsFeatureKey = 'patients';
 
 export interface State extends EntityState<Patient> {
-  favoriteIds: number[];
   loading: LoadingStateEnum;
 }
 
@@ -15,7 +14,6 @@ export const adapter: EntityAdapter<Patient> = createEntityAdapter<Patient>({
 });
 
 export const initialState: State = adapter.getInitialState({
-  favoriteIds: [],
   loading: LoadingStateEnum.NOT_STARTED,
 });
 
@@ -31,16 +29,6 @@ export const reducer = createReducer(
   ),
   on(PatientActions.loadPatientsError,
     () => ({...initialState, loading: LoadingStateEnum.ERRORED})
-  ),
-  on(PatientActions.changePatientFavorite,
-    (state, action) => {
-      const {id, checked} = action;
-      const {favoriteIds} = state;
-      return {
-        ...state,
-        favoriteIds: checked ? [...favoriteIds, id] : favoriteIds.filter(item => item !== id),
-      }
-    }
   ),
   on(PatientActions.clearPatients,
     (state) => {

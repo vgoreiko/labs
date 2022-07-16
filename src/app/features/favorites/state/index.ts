@@ -1,35 +1,39 @@
-import * as fromOrders from "../../orders/state";
-import * as fromPatients from "../../patients/state";
-import {combineReducers, createFeatureSelector, createSelector} from "@ngrx/store";
+import {createFeatureSelector, createSelector} from "@ngrx/store";
+import {State} from "./favorite.reducer";
+import * as fromOrders from "../../orders/state/order.reducer";
+import * as fromPatients from "../../patients/state/patient.reducer";
+
+export {State} from "./favorite.reducer";
 
 export const favoritesFeatureKey = 'favorites';
 
-export interface State {
-  orders: fromOrders.ordersState;
-  patients: fromPatients.patientState;
-}
-
-export const reducer = combineReducers({
-  orders: fromOrders.reducer,
-  patients: fromPatients.reducer,
-});
-
 export const selectFavoritesState = createFeatureSelector<State>(favoritesFeatureKey);
-export const selectOrdersState = createSelector(selectFavoritesState, state => {
+export const selectOrdersState = createFeatureSelector<fromOrders.State>(fromOrders.ordersFeatureKey);
+export const selectPatientsState = createFeatureSelector<fromPatients.State>(fromPatients.patientsFeatureKey);
+export const selectFavoriteOrdersIds = createSelector(selectFavoritesState, state => {
   return state.orders;
 });
-export const selectPatientsState = createSelector(selectFavoritesState, state => {
+export const selectFavoritePatientsIds = createSelector(selectFavoritesState, state => {
   return state.patients;
 });
+
+export const selectIsOrderFavorite = (id: number) =>
+  createSelector(selectFavoriteOrdersIds, (ids) => ids.includes(id));
+
+export const selectIsPatientFavorite = (id: number) =>
+  createSelector(selectFavoritePatientsIds, (ids) => ids.includes(id));
+
 export const selectOrders = createSelector(
   selectOrdersState,
-  (state) => {
-    return state.favoriteIds.map(i => state.entities[i]);
+  selectFavoriteOrdersIds,
+  (state, ids) => {
+    return ids.map(id => state.entities[id])
   }
 );
 export const selectPatients = createSelector(
   selectPatientsState,
-  (state) => {
-    return state.favoriteIds.map(i => state.entities[i]);
+  selectFavoritePatientsIds,
+  (state, ids) => {
+    return ids.map(id => state.entities[id])
   }
 )

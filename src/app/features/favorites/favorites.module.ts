@@ -4,7 +4,10 @@ import {FavoritesListComponent} from './favorites-list/favorites-list.component'
 import {FavoritesRoutingModule} from "./favorites-routing.module";
 import {TranslateModule} from "@ngx-translate/core";
 import {StoreModule} from "@ngrx/store";
-import {favoritesFeatureKey, reducer} from "./state";
+import {favoritesFeatureKey} from "./state";
+import {reducer} from "./state/favorite.reducer";
+import {MatTableModule} from "@angular/material/table";
+import {MatCheckboxModule} from "@angular/material/checkbox";
 
 @NgModule({
   declarations: [FavoritesListComponent],
@@ -13,6 +16,8 @@ import {favoritesFeatureKey, reducer} from "./state";
     FavoritesRoutingModule,
     TranslateModule,
     StoreModule.forFeature(favoritesFeatureKey, reducer),
+    MatTableModule,
+    MatCheckboxModule,
   ],
   providers: []
 })
