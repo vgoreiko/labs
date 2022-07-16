@@ -45,7 +45,6 @@ export class PatientsComponent implements OnInit, OnDestroy {
           this.dataSource.paginator.firstPage();
         }
       });
-    this.getPatients$.next()
   }
 
   ngOnDestroy() {
