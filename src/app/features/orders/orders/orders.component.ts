@@ -1,17 +1,20 @@
 import {Component, OnInit, ChangeDetectionStrategy, OnDestroy, ViewChild} from "@angular/core";
-import {BehaviorSubject, Observable, Subject} from "rxjs";
+import {Observable, Subject} from "rxjs";
 import {debounceTime, takeUntil} from "rxjs/operators";
 import {Store} from "@ngrx/store";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
 import {Order} from "../models";
-import {changeOrderFavorite, clearOrders, loadOrders} from "../state/order.actions";
+import {
+  changeOrderFavorite,
+  clearOrders,
+  loadOrders,
+} from "../state/order.actions";
 import {
   selectAllOrders,
   isLoadingNotStarted,
   State,
   isLoadingInProgress,
-  selectFavoriteOrderIds,
   selectIsOrderFavorite
 } from "../state";
 import {MatCheckboxChange} from "@angular/material/checkbox";

@@ -1,0 +1,43 @@
+.content {
+  position: relative;
+
+  .mat-table {
+    width: 100%;
+    margin-top: 20px;
+    //
+    //.mat-column-orderNum {
+    //  width: 15%;
+    //}
+    //
+    //.mat-column-orderName {
+    //  width: 20%;
+    //}
+    //
+    //.mat-column-status{
+    //  width: 20%;
+    //}
+    //
+    //.mat-column-creator {
+    //  width: 20%;
+    //}
+
+    .mat-column-favorite {
+      width: 15%;
+    }
+
+  }
+
+  .not-loaded-state {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    text-align: center;
+
+    .mat-spinner {
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      margin-left: -50px;
+    }
+  }
+}

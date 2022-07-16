@@ -11,7 +11,6 @@ import {EffectsModule} from "@ngrx/effects";
 import {OrdersEffects} from "./state/order.effects";
 import {MatTableModule} from "@angular/material/table";
 import {MatPaginatorModule} from "@angular/material/paginator";
-import {MatIconModule} from "@angular/material/icon";
 
 @NgModule({
   declarations: [
@@ -25,7 +24,6 @@ import {MatIconModule} from "@angular/material/icon";
     EffectsModule.forFeature([OrdersEffects]),
     MatTableModule,
     MatPaginatorModule,
-    MatIconModule,
   ],
   providers: [
     OrdersService,

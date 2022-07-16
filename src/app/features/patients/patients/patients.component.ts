@@ -1,6 +1,14 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import {Component, OnInit, ChangeDetectionStrategy, ViewChild, OnDestroy} from "@angular/core";
 
-import { ROUTE_ANIMATIONS_ELEMENTS } from "../../../core/core.module";
+import {Observable, Subject} from "rxjs";
+import {MatTableDataSource} from "@angular/material/table";
+import {MatPaginator} from "@angular/material/paginator";
+import {Store} from "@ngrx/store";
+import {debounceTime, takeUntil} from "rxjs/operators";
+import {MatCheckboxChange} from "@angular/material/checkbox";
+import {Patient} from "../models";
+import {isLoadingInProgress, isLoadingNotStarted, selectAllPatients, selectIsPatientFavorite, State} from "../state";
+import {changePatientFavorite, clearPatients, loadPatients} from "../state/patient.actions";
 
 @Component({
   selector: "st-patients",
@@ -8,10 +16,49 @@ import { ROUTE_ANIMATIONS_ELEMENTS } from "../../../core/core.module";
   styleUrls: ["./patients.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PatientsComponent implements OnInit {
-  routeAnimationsElements = ROUTE_ANIMATIONS_ELEMENTS;
+export class PatientsComponent implements OnInit, OnDestroy {
+  patients$: Observable<Patient[]> = this._store.select(selectAllPatients);
+  loadingNotStarted$: Observable<boolean> = this._store.select(isLoadingNotStarted);
+  loadingInProgress$: Observable<boolean> = this._store.select(isLoadingInProgress);
+  isPatientFavorite = (id) => this._store.select(selectIsPatientFavorite(id));
+  getPatients$: Subject<MouseEvent> = new Subject();
+  componentDestroy$ = new Subject();
+  displayedColumns: string[] = ["id", "fullName", "age", "favorite"];
+  dataSource: MatTableDataSource<Patient>;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor() {}
+  constructor(
+    private readonly _store: Store<State>,
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getPatients$.pipe(
+      takeUntil(this.componentDestroy$),
+      debounceTime(200),
+    ).subscribe(() => this._store.dispatch(loadPatients()));
+    this.patients$
+      .pipe(takeUntil(this.componentDestroy$),)
+      .subscribe((patients) => {
+        this.dataSource = new MatTableDataSource(patients);
+        this.dataSource.paginator = this.paginator;
+        if(this.dataSource.paginator) {
+          this.dataSource.paginator.firstPage();
+        }
+      });
+    this.getPatients$.next()
+  }
+
+  ngOnDestroy() {
+    this._store.dispatch(clearPatients());
+    this.componentDestroy$.next();
+    this.componentDestroy$.complete();
+  }
+
+  changeFavorite(event: MatCheckboxChange, id: number) {
+    this._store.dispatch(changePatientFavorite({id, checked: event.checked}));
+  }
+
+  handleGetPatients() {
+    this.getPatients$.next();
+  }
 }
