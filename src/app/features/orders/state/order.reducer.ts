@@ -28,13 +28,23 @@ export const reducer = createReducer(
     }
   ),
   on(OrderActions.loadOrdersSuccess,
-    (state, action) =>adapter.setAll(action.orders, {...state, loading: LoadingStateEnum.LOADED})
+    (state, action) => adapter.setAll(action.orders, {...state, loading: LoadingStateEnum.LOADED})
   ),
   on(OrderActions.loadOrdersError,
     (state) => ({...state, loading: LoadingStateEnum.NOT_STARTED})
   ),
   on(OrderActions.clearOrders,
     (state) => adapter.removeAll({...state, loading: LoadingStateEnum.NOT_STARTED})
+  ),
+  on(OrderActions.changeOrderFavorite,
+    (state, action) => {
+      const {id, checked} = action;
+      const {favoriteIds} = state;
+      return {
+        ...state,
+        favoriteIds: checked ? [...favoriteIds, id] : favoriteIds.filter(item => item !== id),
+      }
+    }
   ),
 );
 

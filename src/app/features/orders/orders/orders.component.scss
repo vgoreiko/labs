@@ -45,6 +45,27 @@ mat-card {
   .mat-table {
     width: 100%;
     margin-top: 20px;
+
+    .mat-column-orderNum {
+      width: 15%;
+    }
+
+    .mat-column-orderName {
+      width: 20%;
+    }
+
+    .mat-column-status{
+      width: 20%;
+    }
+
+    .mat-column-creator {
+      width: 20%;
+    }
+
+    .mat-column-favorite {
+      width: 15%;
+    }
+
   }
 
   .not-loaded-state {

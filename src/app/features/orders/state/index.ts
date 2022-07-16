@@ -12,14 +12,6 @@ export const reducers: ActionReducerMap<State> = {
 
 export const selectOrdersState = createFeatureSelector<fromOrders.State>(fromOrders.ordersFeatureKey);
 
-export const selectOrderIds = createSelector(
-  selectOrdersState,
-  fromOrders.selectIds // shorthand for usersState => fromUser.selectUserIds(usersState)
-);
-export const selectOrderEntities = createSelector(
-  selectOrdersState,
-  fromOrders.selectEntities
-);
 export const selectAllOrders = createSelector(
   selectOrdersState,
   fromOrders.selectAll
@@ -36,3 +28,9 @@ export const isLoadingInProgress = createSelector(
   selectLoadingState,
   (state) => state === LoadingStateEnum.LOADING
 )
+export const selectFavoriteOrderIds = createSelector(
+  selectOrdersState,
+  (state) => state.favoriteIds
+);
+export const selectIsOrderFavorite = (id: number) =>
+  createSelector(selectFavoriteOrderIds, (ids) => ids.includes(id));
