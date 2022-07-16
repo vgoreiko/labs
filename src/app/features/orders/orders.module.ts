@@ -9,6 +9,8 @@ import * as fromOrder from './state/order.reducer';
 import {OrdersService} from "./orders.service";
 import {EffectsModule} from "@ngrx/effects";
 import {OrdersEffects} from "./state/order.effects";
+import {MatTableModule} from "@angular/material/table";
+import {MatPaginatorModule} from "@angular/material/paginator";
 
 @NgModule({
   declarations: [
@@ -20,6 +22,8 @@ import {OrdersEffects} from "./state/order.effects";
     OrdersRoutingModule,
     StoreModule.forFeature(fromOrder.ordersFeatureKey, fromOrder.reducer),
     EffectsModule.forFeature([OrdersEffects]),
+    MatTableModule,
+    MatPaginatorModule,
   ],
   providers: [
     OrdersService,

@@ -38,3 +38,27 @@ mat-card {
     left: 5px;
   }
 }
+
+.content {
+  position: relative;
+
+  .mat-table {
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .not-loaded-state {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    text-align: center;
+
+    .mat-spinner {
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      margin-left: -50px;
+    }
+  }
+}
+

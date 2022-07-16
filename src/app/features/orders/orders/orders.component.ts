@@ -1,9 +1,14 @@
-import {Component, OnInit, ChangeDetectionStrategy, OnDestroy} from "@angular/core";
+import {Component, OnInit, ChangeDetectionStrategy, OnDestroy, ViewChild} from "@angular/core";
 
 import { ROUTE_ANIMATIONS_ELEMENTS } from "../../../core/core.module";
-import {State} from "../state/order.reducer";
 import {Store} from "@ngrx/store";
 import {clearOrders, loadOrders} from "../state/order.actions";
+import {Observable, Subject} from "rxjs";
+import {Order} from "../models";
+import {selectAllOrders, isLoadingNotStarted, State, isLoadingInProgress} from "../state";
+import {debounceTime, takeUntil} from "rxjs/operators";
+import {MatPaginator} from "@angular/material/paginator";
+import {MatTableDataSource} from "@angular/material/table";
 
 @Component({
   selector: "st-orders",
@@ -12,19 +17,44 @@ import {clearOrders, loadOrders} from "../state/order.actions";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OrdersComponent implements OnInit, OnDestroy {
-  routeAnimationsElements = ROUTE_ANIMATIONS_ELEMENTS;
+  orders$: Observable<Order[]> = this._store.select(selectAllOrders);
+  loadingNotStarted$: Observable<boolean> = this._store.select(isLoadingNotStarted);
+  loadingInProgress$: Observable<boolean> = this._store.select(isLoadingInProgress);
+  getOrders$: Subject<MouseEvent> = new Subject();
+  componentDestroy$ = new Subject();
+  displayedColumns: string[] = ['orderNum', 'orderName', 'status', 'creator'];
+  dataSource: MatTableDataSource<Order>;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
     private readonly _store: Store<State>,
   ) {}
 
   ngOnInit() {
-    this._store.dispatch(loadOrders());
+    this.getOrders$.pipe(
+      takeUntil(this.componentDestroy$),
+      debounceTime(200),
+    ).subscribe(() => this._store.dispatch(loadOrders()));
+    this.orders$
+      .pipe(takeUntil(this.componentDestroy$),)
+      .subscribe((orders) => {
+       this.dataSource = new MatTableDataSource(orders);
+       this.dataSource.paginator = this.paginator;
+       if(this.dataSource.paginator) {
+         this.dataSource.paginator.firstPage();
+       }
+    });
   }
 
   ngOnDestroy() {
     // to prevent data be persistent
     // can be solved by @ngrx/component-store (was not added in package.json)
     this._store.dispatch(clearOrders());
+    this.componentDestroy$.next();
+    this.componentDestroy$.complete();
+  }
+
+  handleGetOrders() {
+    this.getOrders$.next();
   }
 }
