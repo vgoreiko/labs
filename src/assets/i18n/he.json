@@ -1,10 +1,11 @@
 {
   "stms.title.long": "LabOS test task",
   "stms.title.short": "LabOS",
-  
+
   "stms.menu.patients": "נבדקים",
   "stms.menu.examples": "דוגמאות",
   "stms.menu.orders": "הזמנות",
+  "stms.menu.favorites": "Favorites",
   "stms.menu.login": "התחברות",
   "stms.menu.logout": "התנתקות",
   "stms.menu.settings": "הגדרות",
@@ -30,5 +31,6 @@
   "stms.patients.get-patients": "מצא נבדקים",
 
   "stms.orders.title": "הזמנות",
-  "stms.orders.get-orders": "מצא הזמנות"
+  "stms.orders.get-orders": "מצא הזמנות",
+  "stms.favorites.title": "Favorites"
 }
