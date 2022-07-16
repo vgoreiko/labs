@@ -30,40 +30,42 @@ export class OrdersComponent implements OnInit, OnDestroy {
   loadingInProgress$: Observable<boolean> = this._store.select(isLoadingInProgress);
   isOrderFavorite = (id) => this._store.select(selectIsOrderFavorite(id));
   getOrders$: Subject<MouseEvent> = new Subject();
-  componentDestroy$ = new Subject();
   displayedColumns: string[] = ['orderNum', 'orderName', 'status', 'creator', 'favorite'];
   dataSource: MatTableDataSource<Order>;
+  private _componentDestroy$ = new Subject();
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
     private readonly _store: Store<State>,
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.getOrders$.pipe(
-      takeUntil(this.componentDestroy$),
+      takeUntil(this._componentDestroy$),
       debounceTime(200),
     ).subscribe(() => this._store.dispatch(loadOrders()));
+
     this.orders$
-      .pipe(takeUntil(this.componentDestroy$),)
+      .pipe(takeUntil(this._componentDestroy$),)
       .subscribe((orders) => {
-       this.dataSource = new MatTableDataSource(orders);
-       this.dataSource.paginator = this.paginator;
-       if(this.dataSource.paginator) {
-         this.dataSource.paginator.firstPage();
-       }
-    });
+        this.dataSource = new MatTableDataSource(orders);
+        this.dataSource.paginator = this.paginator;
+        if (this.dataSource.paginator) {
+          this.dataSource.paginator.firstPage();
+        }
+      });
   }
 
   ngOnDestroy() {
-    this.componentDestroy$.next();
-    this.componentDestroy$.complete();
+    this._componentDestroy$.next();
+    this._componentDestroy$.complete();
   }
 
   changeFavorite(event: MatCheckboxChange, id: number) {
     event.checked
-        ? this._store.dispatch(addToFavorite({favType: "orders", id}))
-        : this._store.dispatch(removeFromFavorite({favType: "orders", id}));
+      ? this._store.dispatch(addToFavorite({favType: "orders", id}))
+      : this._store.dispatch(removeFromFavorite({favType: "orders", id}));
   }
 
   handleGetOrders() {

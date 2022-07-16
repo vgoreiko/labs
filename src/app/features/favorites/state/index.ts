@@ -37,3 +37,15 @@ export const selectPatients = createSelector(
     return ids.map(id => state.entities[id])
   }
 )
+
+export const selectFilteredOrders = (term?: string) =>
+  createSelector(selectOrders, (orders) => {
+    if(!term) return orders;
+    return orders.filter(order => order?.orderName.toLowerCase().includes(term.toLowerCase()));
+  });
+
+export const selectFilteredPatients = (term?: string) =>
+  createSelector(selectPatients, (patients) => {
+    if(!term) return patients;
+    return patients.filter(patient => patient?.fullName.toLowerCase().includes(term.toLowerCase()));
+  });

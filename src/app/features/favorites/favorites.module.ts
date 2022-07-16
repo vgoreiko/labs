@@ -8,6 +8,9 @@ import {favoritesFeatureKey} from "./state";
 import {reducer} from "./state/favorite.reducer";
 import {MatTableModule} from "@angular/material/table";
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [FavoritesListComponent],
@@ -18,6 +21,9 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
     StoreModule.forFeature(favoritesFeatureKey, reducer),
     MatTableModule,
     MatCheckboxModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
   ],
   providers: []
 })

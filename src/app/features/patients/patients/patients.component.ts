@@ -24,9 +24,9 @@ export class PatientsComponent implements OnInit, OnDestroy {
   loadingInProgress$: Observable<boolean> = this._store.select(isLoadingInProgress);
   isPatientFavorite = (id) => this._store.select(selectIsPatientFavorite(id));
   getPatients$: Subject<MouseEvent> = new Subject();
-  componentDestroy$ = new Subject();
   displayedColumns: string[] = ["id", "fullName", "age", "favorite"];
   dataSource: MatTableDataSource<Patient>;
+  private _componentDestroy$ = new Subject();
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
@@ -35,11 +35,11 @@ export class PatientsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getPatients$.pipe(
-      takeUntil(this.componentDestroy$),
+      takeUntil(this._componentDestroy$),
       debounceTime(200),
     ).subscribe(() => this._store.dispatch(loadPatients()));
     this.patients$
-      .pipe(takeUntil(this.componentDestroy$),)
+      .pipe(takeUntil(this._componentDestroy$),)
       .subscribe((patients) => {
         this.dataSource = new MatTableDataSource(patients);
         this.dataSource.paginator = this.paginator;
@@ -50,8 +50,8 @@ export class PatientsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.componentDestroy$.next();
-    this.componentDestroy$.complete();
+    this._componentDestroy$.next();
+    this._componentDestroy$.complete();
   }
 
   changeFavorite(event: MatCheckboxChange, id: number) {

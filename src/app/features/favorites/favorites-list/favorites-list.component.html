@@ -1,6 +1,12 @@
 <div class="container">
     <div rtl>
         <h1 class="main-heading">{{ 'stms.favorites.title' | translate }}</h1>
+        <div class="filter-row" [formGroup]="form">
+            <mat-form-field appearance="fill">
+                <mat-label>Filter Favorite</mat-label>
+                <input formControlName="search" matInput placeholder="Type">
+            </mat-form-field>
+        </div>
         <section class="content">
             <h3>Orders</h3>
             <table mat-table [dataSource]="favoriteOrders$" class="mat-elevation-z8">
