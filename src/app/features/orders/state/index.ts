@@ -1,6 +1,7 @@
 import {ActionReducerMap, createFeatureSelector, createSelector,} from '@ngrx/store';
 import * as fromOrders from './order.reducer';
 import {LoadingStateEnum} from "../models";
+export {reducer, State as ordersState} from './order.reducer';
 
 export interface State {
   orders: fromOrders.State;

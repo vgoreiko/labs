@@ -7,7 +7,6 @@ import {MatTableDataSource} from "@angular/material/table";
 import {Order} from "../models";
 import {
   changeOrderFavorite,
-  clearOrders,
   loadOrders,
 } from "../state/order.actions";
 import {
@@ -57,9 +56,6 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // to prevent data to be persistent
-    // can be solved by @ngrx/component-store (was not added in package.json)
-    this._store.dispatch(clearOrders());
     this.componentDestroy$.next();
     this.componentDestroy$.complete();
   }

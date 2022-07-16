@@ -2,7 +2,8 @@
     <div rtl>
         <h1 class="main-heading">{{ 'stms.favorites.title' | translate }}</h1>
         <section class="content">
-
+            <div *ngFor="let order of favoriteOrders$ | async">{{order.orderNum}}</div>
+            <div *ngFor="let patient of favoritePatients$ | async">{{patient.code}}</div>
         </section>
     </div>
 </div>

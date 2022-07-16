@@ -1,20 +1,21 @@
 import {ActionReducerMap, createFeatureSelector, createSelector,} from '@ngrx/store';
-import * as fromOrders from './patient.reducer';
+import * as fromPatients from './patient.reducer';
 import {LoadingStateEnum} from "../models";
+export {reducer, State as patientState} from './patient.reducer';
 
 export interface State {
-  patients: fromOrders.State;
+  patients: fromPatients.State;
 }
 
 export const reducers: ActionReducerMap<State> = {
-  patients: fromOrders.reducer,
+  patients: fromPatients.reducer,
 };
 
-export const selectPatientState = createFeatureSelector<fromOrders.State>(fromOrders.patientsFeatureKey);
+export const selectPatientState = createFeatureSelector<fromPatients.State>(fromPatients.patientsFeatureKey);
 
 export const selectAllPatients = createSelector(
   selectPatientState,
-  fromOrders.selectAll
+  fromPatients.selectAll
 );
 export const selectLoadingState = createSelector(
   selectPatientState,

@@ -48,7 +48,6 @@ export class PatientsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._store.dispatch(clearPatients());
     this.componentDestroy$.next();
     this.componentDestroy$.complete();
   }
